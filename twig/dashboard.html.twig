@@ -1,0 +1,126 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+<h1 class="sub-header">Migration Overview</h1>
+
+<div class="panel panel-default">
+    <div class="panel-body">
+        <div id="updated">Updated {{ updated }}</div>
+        <div class="row" id="stats">
+            <dl class="dl col-md-3 headline">
+                <dt>Total Customers</dt>
+                <dd>
+                    <p>{{ customers.total | number_format }} ({{ customers.completed | number_format }} completed)</p>
+                </dd>
+            </dl>
+            <dl class="dl col-md-3 headline">
+                <dt>Total Items</dt>
+                <dd>
+                    <p>
+                        {{ total.count | number_format }} Items
+                        (&pound;{{ total.value | number_format(2, '.', ',') }})
+                    </p>
+                </dd>
+            </dl>
+            <dl class="dl col-md-2">
+                <dt>Pending Items</dt>
+                <dd>
+                    <p>{{ pending.count | number_format }} (&pound;{{ pending.value | number_format(2, '.', ',')}})</p>
+                    <p>
+                        <a href="/report/pending" class="btn btn-sm btn-default">
+                            <span class="glyphicon glyphicon-download-alt" aria-hidden="true"></span> CSV
+                        </a>
+                    </p>
+                </dd>
+            </dl>
+            <dl class="dl col-md-2">
+                <dt>Migrated Items</dt>
+                <dd>
+                    <p>{{ processed.migrated | number_format }} (&pound;{{ processed.migrated_value | number_format(2, '.', ',') }})</p>
+                    <p>
+                        <a href="/report/migrated" class="btn btn-sm btn-default">
+                            <span class="glyphicon glyphicon-download-alt" aria-hidden="true"></span> CSV</a>
+                        </p>
+                </dd>
+            </dl>
+            <dl class="dl col-md-2">
+                <dt>Blacklisted Items</dt>
+                <dd>
+                    <p>{{ processed.blacklisted | number_format }} (&pound;{{ processed.blacklisted_value | number_format(2, '.', ',') }})</p>
+                    <p>
+                        <a href="/report/blacklisted" class="btn btn-sm btn-default">
+                            <span class="glyphicon glyphicon-download-alt" aria-hidden="true"></span> CSV
+                        </a>
+                    </p>
+                </dd>
+            </dl>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Lockers</th>
+                            <th>Items</th>
+                            <th class="text-right">Total Value</th>
+                            <th class="text-right"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for registration in registrations %}
+                        <tr>
+                            <td>{{ registration.added }}</td>
+                            <td>{{ registration.count | number_format }}</td>
+                            <td>{{ registration.items | number_format }}</td>
+                            <td class="text-right">£{{ registration.sum | number_format(2, '.', ',') }}</td>
+                            <td class="text-right"><a href="/report/registration?option={{ registration.added }}"><span class="glyphicon glyphicon-download-alt" aria-hidden="true"></span></a></td>
+                        </tr>
+                        {% endfor %}
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Vouchers Sent</th>
+                            <th class="text-right">Total Value</th>
+                            <th class="text-right"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for voucher in vouchers %}
+                        <tr>
+                            <td>{{ voucher.generated_at }}</td>
+                            <td>{{ voucher.count | number_format }}</td>
+                            <td class="text-right">£{{ voucher.sum }}</td>
+                            <td class="text-right"><a href="/report/voucher?option={{ voucher.generated_at }}"><span class="glyphicon glyphicon-download-alt" aria-hidden="true"></span></a></td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="panel panel-default">
+    <div class="panel-body">
+        <a href="/report/un-onboarded" class="btn btn-default pull-right">
+            <span class="glyphicon glyphicon-download-alt" aria-hidden="true"></span> Un-onboarded lockers
+        </a>
+    </div>
+</div>
+
+{% endblock %}

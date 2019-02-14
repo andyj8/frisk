@@ -1,0 +1,21 @@
+#!/usr/bin/php
+<?php
+
+require_once __DIR__ . '/../vendor/autoload.php';
+
+use Symfony\Component\Console\Application;
+use FriskMigrate\Application\Container\ApplicationContainer;
+
+$application = new Application('Frisk Migration Console Helper', 0.1);
+
+$path = realpath(__DIR__ . '/../src/FriskMigrate/Application/Console');
+
+$container = new ApplicationContainer();
+
+foreach (scandir($path) as $entry) {
+    if ($entry == '.' || $entry == '..') continue;
+    $class = 'FriskMigrate\\Application\\Console\\' . substr($entry, 0, -4);
+    $application->add(new $class($container));
+}
+
+$application->run();

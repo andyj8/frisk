@@ -1,0 +1,36 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+    <h1 class="sub-header">High Value Audit</h1>
+
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <table class="table table-hover">
+                <thead>
+                <tr>
+                    <th>Locker Id</th>
+                    <th>Opened</th>
+                    <th>Closed</th>
+                    <th>Unavailable</th>
+                    <th>Value</th>
+                    <th class="text-center"></th>
+                </tr>
+                </thead>
+                <tbody>
+                    {% for item in items %}
+                    <tr>
+                        <td><a href="/customer?criteria={{ item.lockerId }}">{{ item.lockerId }}</a></td>
+                        <td>{{ item.opened|date("m/d/Y") }}</td>
+                        <td>{{ item.closed|date("m/d/Y") }}</td>
+                        <td>{{ item.unmigratedCount }}</td>
+                        <td>&pound;{{ item.unmigratedValue }}</td>
+                        <td></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+{% endblock %}

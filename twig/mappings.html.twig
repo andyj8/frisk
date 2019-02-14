@@ -1,0 +1,26 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+    <h1 class="sub-header">ISBN Mappings</h1>
+
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <form class="form-inline" action="/mappings" method="post" enctype="multipart/form-data">
+                <div class="form-group">
+                    <label for="exampleInputName2">Upload new mappings:</label>
+                    <input name="mappings" type="file" class="form-control">
+                </div>
+                <button type="submit" class="btn btn-primary">Upload</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <a href="/mappings/report" class="btn btn-primary">Download current mappings</a>
+        </div>
+    </div>
+
+{% endblock %}
+

@@ -1,0 +1,36 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+    <h1 class="sub-header">Product Blacklist</h1>
+
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <form class="form-inline" action="/blacklist" method="post"  enctype="multipart/form-data">
+                <div class="form-group">
+                    <label for="exampleInputName2">Upload new blacklist:</label>
+                    <input name="blacklist" type="file" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label for="exampleInputEmail2">Reason:</label>
+                    <select name="reason_id" class="form-control">
+                        <option value="1">Unsuitable content</option>
+                        <option value="2">No GB rights</option>
+                        <option value="3">No longer available</option>
+                        <option value="4">Unknown publisher</option>
+                        <option value="5">Other</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary">Upload</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <a href="/blacklist/report" class="btn btn-primary">Download current blacklist</a>
+        </div>
+    </div>
+
+{% endblock %}
+

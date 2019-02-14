@@ -1,0 +1,23 @@
+{% extends 'helpdesk.html.twig' %}
+
+{% block body %}
+
+<div class="panel panel-default">
+    <div class="panel-body">
+        <div class="row">
+            <div class="col-md-8">
+
+                <form class="form-inline" action="/customer">
+                    <div class="form-group">
+                        <label for="exampleInputName2">Lookup Customer</label>
+                        <input name="criteria" type="text" class="form-control" placeholder="Email">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Search</button>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

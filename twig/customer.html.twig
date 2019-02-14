@@ -1,0 +1,111 @@
+{% extends template %}
+
+{% block body %}
+
+{% if resent %}
+    <div class="alert alert-success">
+        Voucher email resent to {{ customer.email }}
+    </div>
+{% endif %}
+
+<h1 class="sub-header">Customer Dashboard</h1>
+
+<div class="panel panel-default">
+    <div class="panel-body">
+        <div class="row">
+            <div class="col-md-6">
+                <dl class="dl-horizontal">
+                    <dt>Customer</dt>
+                    <dd>{{ customer.name }}</dd>
+                    <dt>Email</dt>
+                    <dd>{{ customer.email }}</dd>
+                    <dt>Status</dt>
+                    <dd>{{ customer.areAllItemsProcessed ? 'Completed' : 'In Progress' }}</dd>
+                </dl>
+            </div>
+            <div class="col-md-6">
+                <dl class="dl-horizontal">
+                    <dt>Slapi ID</dt>
+                    <dd>{{ customer.id }}</dd>
+                    <dt>Locker ID</dt>
+                    <dd>{{ customer.lockerId }}</dd>
+                    {% if customer.voucher %}
+                    <dt>Voucher</dt>
+                    <dd>
+                        {{ customer.voucher.code  }} (&pound;{{ customer.voucher.value }})
+                        <a href="/customer/{{ customer.id }}/resend" class="btn btn-xs btn-primary" style="margin-left: 16px; margin-top: -2px;" onclick="return confirm('Resend?');">Resend</a>
+                    </dd>
+                    {% endif %}
+                </dl>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="panel panel-default">
+    <div class="panel-body">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>ISBN</th>
+                    <th>Title</th>
+                    <th>Publisher</th>
+                    <th>Paid</th>
+                    <th class="text-center">Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in customer.lockerItems %}
+                <tr>
+                    <td>
+                        {% if item.product.mappedIsbn != item.product.isbn %}
+                            <strike>{{ item.product.isbn }}</strike> {{ item.product.mappedIsbn }}
+                        {% else %}
+                            {{ item.product.isbn }}
+                        {% endif %}
+                    </td>
+                    <td>{{ item.product.title }}</td>
+                    <td>{{ item.product.publisher.name }}</td>
+                    <td>&pound;{{ item.pricePaid }}</td>
+                    <td class="text-center">
+                        {% if item.outcome == "migrated" %}
+                            <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+                        {% elseif item.outcome == "blacklisted" %}
+                            <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                        {% elseif item.outcome == "conflicted" %}
+                            <span class="glyphicon glyphicon-ban-circle" aria-hidden="true"></span>
+                        {% else %}
+                            <span class="glyphicon glyphicon-option-horizontal" aria-hidden="true"></span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="panel panel-default">
+    <div class="panel-body">
+        <div class="row" id="stats">
+            <dl class="dl col-md-3">
+                <dt>Total Items</dt>
+                <dd>{{ stats.total.count }} (&pound;{{ stats.total.value | number_format(2, '.', ',') }})</dd>
+            </dl>
+            <dl class="dl col-md-3">
+                <dt>Pending</dt>
+                <dd>{{ stats.pending.count }} (&pound;{{ stats.pending.value | number_format(2, '.', ',')}})</dd>
+            </dl>
+            <dl class="dl col-md-3">
+                <dt>Migrated</dt>
+                <dd>{{ stats.migrated.count }} (&pound;{{ stats.migrated.value | number_format(2, '.', ',') }})</dd>
+            </dl>
+            <dl class="dl col-md-3">
+                <dt>Blacklisted</dt>
+                <dd>{{ stats.blacklisted.count }} (&pound;{{ stats.blacklisted.value | number_format(2, '.', ',') }})</dd>
+            </dl>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
